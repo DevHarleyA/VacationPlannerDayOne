@@ -4,7 +4,7 @@ let photo = document.querySelector('#photoURL')
 let desc = document.querySelector('#description')
 const destList = document.querySelector('.insertHere')
 
-document.querySelector('.submitButton').addEventListener('click', createNew)
+document.querySelector('form').addEventListener('submit', createNew)
 
 // Add Function
 function createNew(e) {
