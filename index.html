@@ -24,15 +24,15 @@
                 <form action="">
                     <div class="mb-3">
                         <label for="destinationName">Destination Name</label><br>
-                        <input type="text" id="destinationName" class="form-control" placeholder="Enter the name of the destination" required>
+                        <input type="text" id="destinationName" class="form-control" placeholder="Enter the name of the destination" required minlength="2">
                     </div>
                     <div class="mb-3">
                         <label for="location">Location</label><br>
-                        <input type="text" id="location" class="form-control" placeholder="Where is it located?">
+                        <input type="text" id="location" class="form-control" placeholder="Where is it located?" required minlength="2">
                     </div>
                     <div class="mb-3">
                         <label for="photo">Photo</label><br>
-                        <input type="text" id="photoURL" class="form-control" placeholder="Enter an image url of the place">
+                        <input type="url" id="photoURL" class="form-control" placeholder="Enter an image url of the place">
                     </div>
                     <div class="mb-3">
                         <label for="description">Description</label><br>
@@ -43,7 +43,7 @@
             </div>
 
             <div class="col-md-9 pt-4">
-                <p class="fw-bold wishList"></p>
+                <p class="fw-bold fs-4 wishList">Enter Destination Details</p>
                 <div class="insertHere row row-cols-1 row-cols-md-3 g-4"></div>
             </div>
 

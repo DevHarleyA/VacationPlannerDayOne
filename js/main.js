@@ -1,11 +1,10 @@
-const placeName = document.querySelector('#destinationName')
-const place = document.querySelector('#location')
-const photo = document.querySelector('#photoURL')
-const desc = document.querySelector('#description')
+let placeName = document.querySelector('#destinationName')
+let place = document.querySelector('#location')
+let photo = document.querySelector('#photoURL')
+let desc = document.querySelector('#description')
 const destList = document.querySelector('.insertHere')
 
 document.querySelector('.submitButton').addEventListener('click', createNew)
-document.querySelector('.insertHere').addEventListener('click', deletePlace)
 
 // Add Function
 function createNew(e) {
@@ -14,24 +13,28 @@ function createNew(e) {
         return
     }
 
+    // enclosing div
     const cardDiv = document.createElement('div')
     destList.appendChild(cardDiv)
     cardDiv.className = 'col'
     
+    // card shell
     const cardShell = document.createElement('div')
     cardDiv.appendChild(cardShell)
     cardShell.className = 'card'
     cardShell.style = 'width: 18rem;'
     
+    // card image
     const cardImage = document.createElement('img')
     cardShell.appendChild(cardImage)
     if(photo.value == '') {
-        cardImage.src = 'https://placekitten.com/200/300'
+        cardImage.src = 'https://www.marsh.com/content/dam/marsh/Imagery/marsh-2/thumbnail-768x768/airline-in-clouds.jpg'
     } else {
         cardImage.src = photo.value
     }
     cardImage.className = 'card-img-top'
 
+    // card body
     const cardBody = document.createElement('div')
     cardShell.appendChild(cardBody)
     cardBody.className = 'card-body'
@@ -59,12 +62,17 @@ function createNew(e) {
     cardBody.appendChild(edits)
     edits.className = 'btn btn-primary me-2'
     edits.innerText = 'Edit Place'
+    edits.addEventListener('click', editPlace)
 
     // delete button
     const removeBtn = document.createElement('button')
     cardBody.appendChild(removeBtn)
     removeBtn.className = 'btn btn-danger me-2'
     removeBtn.innerText = 'Delete Place'
+    removeBtn.addEventListener('click', deletePlace)
+
+    // Change title of Card Category
+    document.querySelector('.wishList').innerText = 'My WishList'
 
     // empty form for new submission
     placeName.value = ''
@@ -75,15 +83,31 @@ function createNew(e) {
 
 // Update Function
 function editPlace(e) {
-    const destinationName = e.target.parentNode.childNodes[0].innerText
-    const locationName = e.target.parentNode.childNodes[1].innerText
-    // const photo = e.target.parentNode.parentNode.
-    const desc2 = 
+    let thisCard = e.target.parentNode
+    let destinationName = thisCard.childNodes[0]
+    let locationName = thisCard.childNodes[1]
+    let photo = e.target.parentNode.parentNode.childNodes[0]
+    let desc2 = thisCard.childNodes[2]
 
-    console.log(destinationName)
+    let newDestination = window.prompt('What do you want to see?')
+    let newLocation = window.prompt('Where is your destination?')
+    let newURL = window.prompt('Did you have a new image URL? [Please enter URL only]')
+    let newDesc = window.prompt('Why do you want to go here?')
+
+    destinationName.innerText = newDestination
+    locationName.innerText = newLocation
+
+    if (newURL.length > 5) {
+        photo.src = newURL
+    }
+
+    desc2.innerText = newDesc
 }
+
 
 // Delete Function - Works
 function deletePlace(e) {
-    e.target.parentNode.parentNode.parentNode.remove()
+    if (e.target.innerText = 'Delete Place') {
+        e.target.parentNode.parentNode.parentNode.remove()
+    }
 }
