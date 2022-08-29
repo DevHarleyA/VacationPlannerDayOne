@@ -1,6 +1,6 @@
 let placeName = document.querySelector('#destinationName')
 let place = document.querySelector('#location')
-let photo = document.querySelector('#photoURL')
+// let photo = document.querySelector('#photoURL')
 let desc = document.querySelector('#description')
 const destList = document.querySelector('.insertHere')
 
@@ -9,7 +9,7 @@ document.querySelector('form').addEventListener('submit', createNew)
 // Add Function
 function createNew(e) {
     e.preventDefault()
-    if(placeName.value == '') {
+    if(placeName.value == '' || place.value == '') {
         return
     }
 
@@ -27,11 +27,18 @@ function createNew(e) {
     // card image
     const cardImage = document.createElement('img')
     cardShell.appendChild(cardImage)
-    if(photo.value == '') {
-        cardImage.src = 'https://www.marsh.com/content/dam/marsh/Imagery/marsh-2/thumbnail-768x768/airline-in-clouds.jpg'
-    } else {
-        cardImage.src = photo.value
-    }
+    const accessKey = config.MY_ACCESS_KEY
+    const url = encodeURI(`https://api.unsplash.com/photos/random/?client_id=${accessKey}&query=${placeName.value}&query=${place.value}`)
+    fetch(url)
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            console.log(data.urls.thumb)
+            cardImage.src = data.urls.thumb
+        })
+        .catch(err => {
+            console.log(`error ${err}`)
+        })
     cardImage.className = 'card-img-top'
 
     // card body
@@ -77,7 +84,7 @@ function createNew(e) {
     // empty form for new submission
     placeName.value = ''
     place.value = ''
-    photo.value = ''
+    //photo.value = ''
     desc.value = ''
 }
 
