@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000
 const bodyParser = require('body-parser')
 const MongoClient = require('mongodb').MongoClient
 const configDB = require('./config/database.js')
-const fetch = require('node-fetch'); 
+const fetch = require('node-fetch');
 const connectionString = configDB.url
 
 MongoClient.connect(connectionString, { useUnifiedTopology: true })
@@ -36,7 +36,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
             const accessKey = process.env.UNSPLASH_KEY
             const url = encodeURI(`https://api.unsplash.com/photos/random/?client_id=${accessKey}&query=${req.body.destinationName}&query=${req.body.location}`)
 
-                fetch(url)
+            fetch(url)
                 .then(res => res.json())
                 .then(data => {
                     console.log(data)
@@ -50,7 +50,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
                         location: req.body.location,
                         description: req.body.description,
                         imgSRC: source
-        
+
                         //TODO add edited indicator (boolean) to show that card has been edited (Optional)
                     })
                     console.log('Saved to database')
@@ -65,7 +65,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
             const accessKey = process.env.UNSPLASH_KEY
             const url = encodeURI(`https://api.unsplash.com/photos/random/?client_id=${accessKey}&query=${req.body.newDestinationName}&query=${req.body.newLocation}`)
 
-                fetch(url)
+            fetch(url)
                 .then(res => res.json())
                 .then(data => {
                     let source = data.urls.thumb
@@ -73,26 +73,33 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
                 })
                 .then(source => {
                     vacayCollection.findOneAndUpdate(
-                        {destinationName: req.body.oldDestinationName}, 
+                        { destinationName: req.body.oldDestinationName },
                         {
-                        $set: {
-                            destinationName: req.body.newDestinationName,
-                            location: req.body.newLocation,
-                            description: req.body.newDescription,
-                            imgSRC: source
-                        }
-                        }, 
-                    {
-                        sort: {_id: -1},
-                        upsert: false
-                    }, (err, result) => {
-                        if (err) return res.send(err)
-                        res.send(result)
-                    })
+                            $set: {
+                                destinationName: req.body.newDestinationName,
+                                location: req.body.newLocation,
+                                description: req.body.newDescription,
+                                imgSRC: source
+                            }
+                        },
+                        {
+                            sort: { _id: -1 },
+                            upsert: false
+                        }, (err, result) => {
+                            if (err) return res.send(err)
+                            res.send(result)
+                        })
                 })
                 .catch(err => {
                     res.send(err)
                 })
+        })
+
+        app.delete('/deletePlace', (req, res) => {
+            vacayCollection.findOneAndDelete({ destinationName: req.body.destinationName }, (err, result) => {
+                if (err) return res.send(500, err)
+                res.send('Destination deleted!')
+            })
         })
 
         app.listen(port)

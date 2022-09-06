@@ -1,4 +1,5 @@
 const editBtn = document.getElementsByClassName('editBtn')
+const deleteBtn = document.getElementsByClassName('deleteBtn')
 
 Array.from(editBtn).forEach(function (element) {
     element.addEventListener('click', function () {
@@ -13,7 +14,7 @@ Array.from(editBtn).forEach(function (element) {
         let newDesc = window.prompt('Why do you want to go here?')
 
         console.log("New Place: " + newDestination + ". New Location: " + newLocation + ". New Desc: " + newDesc)
-        // fetch goes here
+
         fetch('changePlace', {
             method: 'put',
             headers: { 'Content-Type': 'application/json'},
@@ -31,15 +32,25 @@ Array.from(editBtn).forEach(function (element) {
         })
         .then(data => {
             console.log(data)
-            window.location.reload(true)
+            window.location.reload()
         })
     })
 })
 
+Array.from(deleteBtn).forEach(function (element) {
+    element.addEventListener('click', function () {
+        let destinationName = this.parentNode.childNodes[3].innerText
+        console.log(destinationName)
 
-// Delete Function - Works
-function deletePlace(e) {
-    if (e.target.innerText = 'Delete Place') {
-        e.target.parentNode.parentNode.parentNode.remove()
-    }
-}
+        fetch('deletePlace', {
+            method: 'delete',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                'destinationName': destinationName
+            })
+        })
+        .then(response => {
+            window.location.reload()
+        })
+    })
+})
