@@ -39,8 +39,30 @@
             </div>
 
             <div class="col-md-9 pt-4">
+                <% if (vacay.length === 0) {%>
                 <p class="fw-bold fs-4 wishList text-center">Enter Destination Details</p>
-                <div class="insertHere row row-cols-1 row-cols-md-3 g-4"></div>
+                <% } else {%>
+                <div class="row row-cols-1 row-cols-md-3 g-4 vacays">
+                    <% for (let i = 0; i < vacay.length; i++) {%>
+                        <div class="col">
+                            <div class="card" style="width: 18rem;">
+                                <% if (vacay[i].imgSRC === '') {%>
+                                <img class="card-img-top" src="img/default_pic.jpeg" alt="">
+                                <% } else {%>
+                                <img class="card-img-top" src="<%= vacay[i].imgSRC%>" alt="">
+                                <% } %>
+                                <div class="card-body">
+                                    <h4 class="card-title"><%= vacay[i].location%></h4>
+                                    <h6 class="card-title"><%= vacay[i].destinationName%></h6>
+                                    <p class="card-text"><%= vacay[i].description%></p>
+                                    <button class="btn btn-primary me-2">Edit Place</button>
+                                    <button class="btn btn-danger me-2">Delete Place</button>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+                <% } %>
             </div>
 
         </div>
@@ -51,7 +73,7 @@
         crossorigin="anonymous"></script>
 
     <script src="config.js"></script>    
-    <script src="public/main.js"></script>
+    <!-- <script src="public/main.js"></script> -->
 </body>
 
 </html>

@@ -4,7 +4,7 @@ let place = document.querySelector('#location')
 let desc = document.querySelector('#description')
 const destList = document.querySelector('.insertHere')
 
-document.querySelector('form').addEventListener('submit', createNew)
+// document.querySelector('form').addEventListener('submit', createNew)
 
 // Add Function
 function createNew(e) {
