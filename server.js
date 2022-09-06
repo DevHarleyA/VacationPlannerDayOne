@@ -33,7 +33,6 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         })
 
         app.post('/destinations', (req, res) => {
-            // insert fetch here
             const accessKey = process.env.UNSPLASH_KEY
             const url = encodeURI(`https://api.unsplash.com/photos/random/?client_id=${accessKey}&query=${req.body.destinationName}&query=${req.body.location}`)
 
@@ -42,7 +41,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
                 .then(data => {
                     console.log(data)
                     console.log(data.urls.thumb)
-                    source = data.urls.thumb
+                    let source = data.urls.thumb
                     return source
                 })
                 .then(source => {
@@ -59,6 +58,40 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
                 })
                 .catch(err => {
                     console.log(`error ${err}`)
+                })
+        })
+
+        app.put('/changePlace', (req, res) => {
+            const accessKey = process.env.UNSPLASH_KEY
+            const url = encodeURI(`https://api.unsplash.com/photos/random/?client_id=${accessKey}&query=${req.body.newDestinationName}&query=${req.body.newLocation}`)
+
+                fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    let source = data.urls.thumb
+                    return source
+                })
+                .then(source => {
+                    vacayCollection.findOneAndUpdate(
+                        {destinationName: req.body.oldDestinationName}, 
+                        {
+                        $set: {
+                            destinationName: req.body.newDestinationName,
+                            location: req.body.newLocation,
+                            description: req.body.newDescription,
+                            imgSRC: source
+                        }
+                        }, 
+                    {
+                        sort: {_id: -1},
+                        upsert: false
+                    }, (err, result) => {
+                        if (err) return res.send(err)
+                        res.send(result)
+                    })
+                })
+                .catch(err => {
+                    res.send(err)
                 })
         })
 
